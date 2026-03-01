@@ -158,7 +158,6 @@ For critical weather decisions, always consult official government sources.
 
 Rohit Patil  
 B.Tech Student | AI & Systems Enthusiast  
-Graduating 2028  
 
 ---
 
