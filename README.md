@@ -116,4 +116,4 @@ Uses official National Weather Service data. For critical weather decisions, con
 
 ---
 
-**Rohit Patil** · B.Tech IT, WCE Sangli · [GitHub](https://github.com/TheOGRohit)
+**Rohit Patil** · B.Tech  · [GitHub](https://github.com/TheOGRohit)
