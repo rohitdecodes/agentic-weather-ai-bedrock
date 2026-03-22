@@ -1,173 +1,119 @@
-# 🚀 Agentic Weather AI  
-### Built with Amazon Bedrock + Claude 4.5 Sonnet
+# Agentic Weather AI
 
-An end-to-end **Agentic AI system** that dynamically plans, executes, and processes real-world API calls to deliver live weather forecasts.
+**Real-time weather forecasts powered by an LLM reasoning agent — built on Amazon Bedrock + Claude Sonnet.**
 
-This project demonstrates how Large Language Models can function as reasoning agents — not just text generators.
-
----
-
-## 🧠 What Makes This “Agentic”?
-
-Traditional AI systems:
-
-Input → Hardcoded API → Output
-
-This system:
-
-Input → AI Planning → API Execution → AI Processing → Response
-
-Instead of hardcoding API endpoints, the AI:
-
-- Understands natural language location input  
-- Determines geographic coordinates  
-- Dynamically generates National Weather Service API calls  
-- Executes real HTTP requests  
-- Extracts structured forecast data  
-- Converts raw JSON into human-friendly summaries  
+Unlike a traditional API wrapper, this system uses the model as a planner: it interprets flexible user input, derives coordinates, constructs National Weather Service API calls on the fly, and converts raw JSON into a readable forecast. No hardcoded endpoints, no rigid input format.
 
 ---
 
-## 🏗 System Architecture
+## How It Works
 
-### Step-by-step Flow
+```
+User Input → AI Planning → Points API → Forecast API → AI Summarization → Output
+```
 
-1. **User Input**
-   - City name (Seattle)
-   - ZIP code (90210)
-   - Location description ("Largest city in California")
+1. **User provides a location** — city name, ZIP code, or a natural language description (e.g. *"largest city in California"*)
+2. **Claude determines coordinates** — infers latitude/longitude and constructs the NWS Points API URL
+3. **Points API call** — retrieves the forecast office and grid metadata
+4. **Forecast API call** — fetches live weather data from the NWS
+5. **Claude summarizes** — converts structured JSON into a concise, human-readable forecast
 
-2. **AI Planning (Claude 4.5 Sonnet)**
-   - Determines approximate latitude & longitude  
-   - Generates NWS Points API URL  
-
-3. **Points API Call**
-   - Returns forecast office & grid information  
-
-4. **Forecast API Call**
-   - Fetches real-time weather forecast JSON  
-
-5. **AI Processing**
-   - Converts raw structured data into readable summary  
-
-6. **Final Output**
-   - Practical, human-friendly weather forecast  
+The model acts in two distinct roles: **planner** (step 2) and **summarizer** (step 5). This separation is intentional and worth understanding.
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
-- Amazon Bedrock (LLM orchestration)
-- Claude 4.5 Sonnet (Reasoning + Planning + Summarization)
-- boto3 (AWS SDK for Python)
-- National Weather Service API (Live weather data)
-- Streamlit (Web interface)
-- Pure Python (No heavy AI frameworks)
+| Component | Role |
+|---|---|
+| Amazon Bedrock | LLM API orchestration |
+| Claude Sonnet | Reasoning, planning, summarization |
+| boto3 | AWS SDK for Python |
+| National Weather Service API | Live weather data (free, no key required) |
+| Streamlit | Web interface |
+
+No LangChain, no LlamaIndex — deliberately vanilla Python to keep the agent logic visible and understandable.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
+```
 agentic-weather-ai-bedrock/
-
-│  
-├── cli.py                  # Command-line agent  
-├── weather_agent_web.py    # Streamlit web application  
-├── requirements.txt  
-├── README.md  
-└── architecture.png        # (Optional system diagram)  
-
----
-
-## 🖥 Installation & Setup
-
-### 1️⃣ Clone Repository
-
-git clone https://github.com/TheOGRohit/agentic-weather-ai-bedrock.git  
-cd agentic-weather-ai-bedrock  
+├── cli.py                  # Command-line interface
+├── weather_agent_web.py    # Streamlit web app
+├── requirements.txt
+├── README.md
+└── architecture.png        # System diagram (optional)
+```
 
 ---
 
-### 2️⃣ Install Dependencies
+## Setup
 
-pip install -r requirements.txt  
+### 1. Clone the repo
 
----
+```bash
+git clone https://github.com/TheOGRohit/agentic-weather-ai-bedrock.git
+cd agentic-weather-ai-bedrock
+```
 
-### 3️⃣ Configure AWS Credentials
+### 2. Install dependencies
 
-Make sure AWS CLI is configured:
+```bash
+pip install -r requirements.txt
+```
 
-aws configure  
+### 3. Configure AWS credentials
 
-Use:
+```bash
+aws configure
+# Region: us-west-2
+```
 
-Region: us-west-2  
-
-Your IAM user must have access to Amazon Bedrock runtime.
-
----
-
-## ▶️ Run the Application
-
-### CLI Version
-
-python cli.py  
+Your IAM user needs Bedrock runtime access (`bedrock:InvokeModel`).
 
 ---
 
-### Web Version (Recommended)
+## Running the App
 
-streamlit run weather_agent_web.py  
+**CLI:**
+```bash
+python cli.py
+```
 
-Then open the local Streamlit URL in your browser.
-
----
-
-
-## 🎯 Key Learnings
-
-- Designing Agentic AI workflows  
-- Using LLMs as planners vs summarizers  
-- Dynamic API orchestration  
-- Prompt engineering for structured outputs  
-- Handling multi-step AI-driven systems  
-- Building CLI + Web UI for the same core agent  
+**Web (recommended):**
+```bash
+streamlit run weather_agent_web.py
+```
 
 ---
 
-## 🚀 Future Improvements
+## What This Actually Demonstrates
 
-- Replace curl with requests library  
-- Add caching layer  
-- Implement retry & timeout strategies  
-- Add structured logging  
-- Deploy on AWS (EC2 / ECS / Lambda)  
-- Extend to multi-tool agent system  
-
----
-
-## ⚠️ Disclaimer
-
-This project uses official National Weather Service data for educational purposes.  
-For critical weather decisions, always consult official government sources.
+- Using an LLM as a **dynamic API planner**, not just a text generator
+- Separating planning and summarization into distinct model calls
+- Handling multi-step, state-dependent workflows without a framework
+- Prompt engineering for structured intermediate outputs
+- Building the same agent core behind both a CLI and web UI
 
 ---
 
-## 👨‍💻 Author
+## Potential Next Steps
 
-Rohit Patil  
-B.Tech Student | AI & Systems Enthusiast  
+- Swap `curl` subprocess calls for the `requests` library
+- Add a caching layer to avoid redundant NWS calls
+- Implement retry logic and request timeouts
+- Add structured logging (currently print-based)
+- Deploy to AWS (EC2 / Lambda / ECS)
+- Extend to a multi-tool agent (add radar, alerts, historical data)
 
 ---
 
-# 🌟 Why This Project Matters
+## Disclaimer
 
-This project demonstrates that LLMs can:
+Uses official National Weather Service data. For critical weather decisions, consult [weather.gov](https://weather.gov) directly.
 
-- Plan multi-step workflows  
-- Interact with external APIs  
-- Process structured data  
-- Adapt to flexible user input  
+---
 
-It moves beyond chatbot-style AI into real-world autonomous system design.
+**Rohit Patil** · B.Tech IT, WCE Sangli · [GitHub](https://github.com/TheOGRohit)
